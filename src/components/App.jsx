@@ -42,6 +42,7 @@ export class App extends Component {
 
       this.setState({
         images: data.hits,
+        page: 1,
       });
     } catch (error) {
       this.setState({ error: error.message });
