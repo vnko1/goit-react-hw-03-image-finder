@@ -12,6 +12,9 @@ export class App extends Component {
     showModal: false,
   };
 
+  totalHits = null;
+  currentId = null;
+
   async componentDidUpdate(_, prevState) {
     if (prevState.page < this.state.page) {
       try {
@@ -27,7 +30,6 @@ export class App extends Component {
       }
     }
   }
-  totalHits = null;
 
   onHandleSubmit = async e => {
     e.preventDefault();
@@ -52,6 +54,30 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
+  openModal = id => {
+    this.setState({
+      showModal: true,
+    });
+    this.currentId = id;
+    document.addEventListener('keydown', this.onKeyClick);
+  };
+
+  imageToShow = () => {
+    return this.state.images.find(image => image.id === this.currentId);
+  };
+
+  onKeyClick = e => {
+    if (e.code === 'Escape') {
+      this.setState({ showModal: false });
+    }
+  };
+
+  onMouseClick = e => {
+    if (e.target === e.currentTarget) {
+      this.setState({ showModal: false });
+    }
+  };
+
   render() {
     const { images, error, status, showModal } = this.state;
     return (
@@ -61,7 +87,9 @@ export class App extends Component {
           onHandleChange={this.onHandleChange}
         />
         {error && <p>{`${error}. Try to reload your page!`}</p>}
-        {!!images.length && <ImageGallery images={this.state.images} />}
+        {!!images.length && (
+          <ImageGallery images={this.state.images} openModal={this.openModal} />
+        )}
 
         {(status === STATUS.IDLE || status === STATUS.RESOLVED) &&
           !!images.length && (
@@ -71,7 +99,13 @@ export class App extends Component {
             />
           )}
         {status === STATUS.PENDING && <Loader />}
-        {showModal && <Modal />}
+        {showModal && (
+          <Modal
+            image={this.imageToShow()}
+            onKeyClick={this.onKeyClick}
+            onMouseClick={this.onMouseClick}
+          />
+        )}
       </div>
     );
   }

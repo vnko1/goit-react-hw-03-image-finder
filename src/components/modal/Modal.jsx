@@ -5,12 +5,21 @@ import css from './Modal.module.css';
 const modal = document.querySelector('#modal-root');
 
 export class Modal extends Component {
+  componentWillUnmount() {
+    const { onKeyClick } = this.props;
+    document.removeEventListener('keydown', onKeyClick);
+  }
+
   render() {
-    const { src, alt } = this.props;
+    const {
+      onMouseClick,
+      image: { largeImageURL, tags },
+    } = this.props;
+
     return createPortal(
-      <div className={css.Overlay}>
+      <div className={css.Overlay} onClick={onMouseClick}>
         <div className={css.Modal}>
-          <img src={src} alt={alt} />
+          <img src={largeImageURL} alt={tags} />
         </div>
       </div>,
       modal
