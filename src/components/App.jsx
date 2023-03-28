@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { STATUS, fetchImage } from '../services/index';
-import { SearchBar, ImageGallery, Loader, Button } from './index';
+import { SearchBar, ImageGallery, Loader, Button, Modal } from './index';
 
 export class App extends Component {
   state = {
@@ -9,6 +9,7 @@ export class App extends Component {
     page: 1,
     error: null,
     status: STATUS.IDLE,
+    showModal: false,
   };
 
   async componentDidUpdate(_, prevState) {
@@ -52,7 +53,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, error, status } = this.state;
+    const { images, error, status, showModal } = this.state;
     return (
       <div className="App">
         <SearchBar
@@ -70,6 +71,7 @@ export class App extends Component {
             />
           )}
         {status === STATUS.PENDING && <Loader />}
+        {showModal && <Modal />}
       </div>
     );
   }
