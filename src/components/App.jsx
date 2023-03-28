@@ -23,10 +23,26 @@ export class App extends Component {
   totalHits = null;
 
   async componentDidUpdate(_, prevState) {
+    const { page, query } = this.state;
+
+    if (prevState.query !== this.state.query) {
+      try {
+        const data = await fetchImage(query, page);
+        if (prevState.query !== this.state.query) {
+          this.totalHits = data.totalHits;
+          this.setState({
+            images: data.hits,
+            status: STATUS.LOADED,
+          });
+        }
+      } catch (error) {
+        this.setState({ error: error.message, status: STATUS.ERROR });
+      }
+    }
+
     if (prevState.page < this.state.page) {
       try {
         this.setState({ status: STATUS.LOADING });
-        const { page, query } = this.state;
         const data = await fetchImage(query, page);
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
@@ -38,23 +54,10 @@ export class App extends Component {
     }
   }
 
-  onHandleSubmit = async e => {
+  onHandleSubmit = e => {
     e.preventDefault();
-
     const { value } = e.target.elements.query;
-    await this.setState({ page: 1, query: value, status: STATUS.LOADING });
-
-    try {
-      const { page, query } = this.state;
-      const data = await fetchImage(query, page);
-      this.totalHits = data.totalHits;
-      this.setState({
-        images: data.hits,
-        status: STATUS.LOADED,
-      });
-    } catch (error) {
-      this.setState({ error: error.message, status: STATUS.ERROR });
-    }
+    this.setState({ page: 1, query: value, status: STATUS.LOADING });
   };
 
   onHandleClick = () => {
