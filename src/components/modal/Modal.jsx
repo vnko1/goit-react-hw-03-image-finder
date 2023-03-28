@@ -9,8 +9,10 @@ export class Modal extends Component {
   static propTypes = {
     onKeyClick: PropTypes.func.isRequired,
     onMouseClick: PropTypes.func.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
-    tags: PropTypes.string.isRequired,
+    image: PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   componentWillUnmount() {
