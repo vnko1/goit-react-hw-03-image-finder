@@ -16,7 +16,7 @@ export class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (prevState.page < this.state.page) {
       try {
         this.setState({ status: STATUS.PENDING });
         const { page, query } = this.state;
@@ -30,19 +30,17 @@ export class App extends Component {
       }
     }
   }
+  totalHits = null;
 
   onHandleSubmit = async e => {
     e.preventDefault();
-
     try {
+      await this.setState({ page: 1 });
       const { page, query } = this.state;
       const data = await fetchImage(query, page);
-
       this.totalHits = data.totalHits;
-
       this.setState({
         images: data.hits,
-        page: 1,
       });
     } catch (error) {
       this.setState({ error: error.message });
@@ -56,8 +54,6 @@ export class App extends Component {
   onHandleClick = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-
-  totalHits = null;
 
   render() {
     const { images, error, status } = this.state;
