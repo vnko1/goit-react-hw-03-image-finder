@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { fetchImage } from 'services/api';
-import { STATUS } from 'services/constans';
-import { SearchBar } from './searchBar/SearchBar';
-import { ImageGallery } from './imageGallery/ImageGallery';
-import { Button } from './button/Button';
-import { Loader } from './loader/Loader';
+import { STATUS, fetchImage } from '../services/index';
+import { SearchBar, ImageGallery, Loader, Button } from './index';
 
 export class App extends Component {
   state = {
@@ -63,7 +59,7 @@ export class App extends Component {
           onHandleSubmit={this.onHandleSubmit}
           onHandleChange={this.onHandleChange}
         />
-        {error && <div>{`${error}. Try to reload your page!`}</div>}
+        {error && <p>{`${error}. Try to reload your page!`}</p>}
         {!!images.length && <ImageGallery images={this.state.images} />}
 
         {(status === STATUS.IDLE || status === STATUS.RESOLVED) &&
