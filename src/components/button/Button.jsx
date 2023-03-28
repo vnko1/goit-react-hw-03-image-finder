@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import css from './Button.module.css';
 
 export const Button = ({ disabled, onHandleClick }) => {
@@ -11,4 +12,9 @@ export const Button = ({ disabled, onHandleClick }) => {
       Load more
     </button>
   );
+};
+
+Button.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  onHandleClick: PropTypes.func.isRequired,
 };

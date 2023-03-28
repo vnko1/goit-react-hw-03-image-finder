@@ -1,4 +1,5 @@
 import css from './SearchBar.module.css';
+import PropTypes from 'prop-types';
 import { GoSearch } from 'react-icons/go';
 
 export const SearchBar = props => {
@@ -8,7 +9,6 @@ export const SearchBar = props => {
       <form className={css.SearchForm} onSubmit={onHandleSubmit}>
         <button type="submit" className={css['SearchForm-button']}>
           <GoSearch />
-          {/* <span className={css['SearchForm-button-label']}>Search</span> */}
         </button>
         <input
           className={css['SearchForm-input']}
@@ -22,4 +22,9 @@ export const SearchBar = props => {
       </form>
     </header>
   );
+};
+
+SearchBar.propTypes = {
+  onHandleSubmit: PropTypes.func.isRequired,
+  onHandleChange: PropTypes.func.isRequired,
 };
