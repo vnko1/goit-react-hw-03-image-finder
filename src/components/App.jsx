@@ -74,12 +74,12 @@ export class App extends Component {
     if (e.code === 'Escape') {
       this.setState({ showModal: false });
     }
-    if (e.code === 'ArrowRight') {
-      this.changeIndex(1);
-    }
-    if (e.code === 'ArrowLeft') {
-      this.changeIndex(-1);
-    }
+    // if (e.code === 'ArrowRight') {
+    //   this.changeIndex(1);
+    // }
+    // if (e.code === 'ArrowLeft') {
+    //   this.changeIndex(-1);
+    // }
   };
 
   onMouseClick = e => {
