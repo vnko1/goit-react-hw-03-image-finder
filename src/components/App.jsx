@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { STATUS, fetchImage } from '../services/index';
-import { SearchBar, ImageGallery, Loader, Button, Modal } from './index';
+import {
+  SearchBar,
+  ImageGallery,
+  Loader,
+  Button,
+  Modal,
+  Message,
+} from './index';
 
 export class App extends Component {
   state = {
@@ -18,7 +25,7 @@ export class App extends Component {
   async componentDidUpdate(_, prevState) {
     if (prevState.page < this.state.page) {
       try {
-        this.setState({ status: STATUS.PENDING });
+        this.setState({ status: STATUS.LOADING });
         const { page, query } = this.state;
         const data = await fetchImage(query, page);
         this.setState(prevState => ({
@@ -26,7 +33,7 @@ export class App extends Component {
           status: STATUS.LOADED,
         }));
       } catch (error) {
-        this.setState({ error: error.message });
+        this.setState({ error: error.message, status: STATUS.ERROR });
       }
     }
   }
@@ -35,7 +42,7 @@ export class App extends Component {
     e.preventDefault();
 
     const { value } = e.target.elements.query;
-    await this.setState({ page: 1, query: value, status: STATUS.PENDING });
+    await this.setState({ page: 1, query: value, status: STATUS.LOADING });
 
     try {
       const { page, query } = this.state;
@@ -46,7 +53,7 @@ export class App extends Component {
         status: STATUS.LOADED,
       });
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ error: error.message, status: STATUS.ERROR });
     }
   };
 
@@ -83,9 +90,11 @@ export class App extends Component {
     return (
       <div className="App">
         <SearchBar onHandleSubmit={this.onHandleSubmit} />
-        {error && <p>{`${error}. Try to reload your page!`}</p>}
+        {error && <Message>{`${error}. Try to reload your page!`}</Message>}
         {!images.length && status === STATUS.LOADED && (
-          <p>Nothing found. Try searching with a different parameter!</p>
+          <Message>
+            Nothing found. Try searching with a different parameter!
+          </Message>
         )}
         {!!images.length && (
           <ImageGallery images={this.state.images} openModal={this.openModal} />
@@ -98,7 +107,7 @@ export class App extends Component {
               disabled={images.length >= this.totalHits}
             />
           )}
-        {status === STATUS.PENDING && <Loader />}
+        {status === STATUS.LOADING && <Loader />}
         {showModal && (
           <Modal
             image={this.imageToShow()}

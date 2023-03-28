@@ -1,5 +1,6 @@
 export const STATUS = {
   IDLE: 'idle',
-  PENDING: 'pending',
-  LOADED: 'resolved',
+  LOADING: 'loading',
+  LOADED: 'loaded',
+  ERROR: 'error',
 };
