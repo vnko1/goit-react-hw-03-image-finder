@@ -24,8 +24,8 @@ export class App extends Component {
 
   async componentDidUpdate(_, prevState) {
     if (prevState.query !== this.state.query) {
-      await this.setState({ page: 1, status: STATUS.LOADING });
       try {
+        await this.setState({ page: 1, status: STATUS.LOADING });
         const { page, query } = this.state;
         const data = await fetchImage(query, page);
         this.totalHits = data.totalHits;
