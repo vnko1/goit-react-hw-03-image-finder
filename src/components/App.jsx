@@ -29,8 +29,9 @@ export class App extends Component {
         const { page, query } = this.state;
         const data = await fetchImage(query, page);
         this.totalHits = data.totalHits;
+
         this.setState({
-          images: data.hits,
+          images: this.normalizedData(data.hits),
           status: STATUS.LOADED,
         });
       } catch (error) {
@@ -44,7 +45,7 @@ export class App extends Component {
         this.setState({ status: STATUS.LOADING });
         const data = await fetchImage(query, page);
         this.setState(prevState => ({
-          images: [...prevState.images, ...data.hits],
+          images: [...prevState.images, ...this.normalizedData(data.hits)],
           status: STATUS.LOADED,
         }));
       } catch (error) {
@@ -53,10 +54,16 @@ export class App extends Component {
     }
   }
 
+  normalizedData = data => {
+    return data.map(({ id, tags, webformatURL, largeImageURL }) => {
+      return { id, tags, webformatURL, largeImageURL };
+    });
+  };
+
   onHandleSubmit = e => {
     e.preventDefault();
     const { value } = e.target.elements.query;
-    this.setState({ query: value });
+    this.setState({ query: value.trim() });
   };
 
   onHandleClick = () => {
@@ -76,12 +83,12 @@ export class App extends Component {
     if (e.code === 'Escape') {
       this.setState({ showModal: false });
     }
-    // if (e.code === 'ArrowRight') {
-    //   this.changeIndex(1);
-    // }
-    // if (e.code === 'ArrowLeft') {
-    //   this.changeIndex(-1);
-    // }
+    if (e.code === 'ArrowRight') {
+      this.changeIndex(1);
+    }
+    if (e.code === 'ArrowLeft') {
+      this.changeIndex(-1);
+    }
   };
 
   onMouseClick = e => {
@@ -91,6 +98,14 @@ export class App extends Component {
   };
 
   changeIndex = value => {
+    if (this.state.currentIndex < 1) {
+      this.setState({ currentIndex: this.state.images.length - 1 });
+    }
+    if (this.state.currentIndex === this.state.images.length - 1) {
+      this.setState({
+        currentIndex: 0,
+      });
+    }
     this.setState(prevState => {
       return {
         currentIndex: prevState.currentIndex + value,
@@ -101,7 +116,6 @@ export class App extends Component {
   render() {
     const { images, error, status, showModal } = this.state;
     const currentImage = this.state.images[this.state.currentIndex];
-    const totalImages = this.state.images.length;
 
     return (
       <div className="App">
@@ -129,8 +143,6 @@ export class App extends Component {
             image={currentImage}
             onKeyClick={this.onKeyClick}
             onMouseClick={this.onMouseClick}
-            totalImages={totalImages}
-            currentPosition={this.state.currentIndex + 1}
             changeIndex={this.changeIndex}
           />
         )}
