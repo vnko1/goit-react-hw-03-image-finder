@@ -61,10 +61,6 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  imageToShow = () => {
-    return this.state.images.find(image => image.id === this.currentId);
-  };
-
   openModal = id => {
     this.setState({
       showModal: true,
