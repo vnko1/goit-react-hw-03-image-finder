@@ -23,7 +23,7 @@ export class App extends Component {
         const data = await fetchImage(query, page);
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
-          status: STATUS.RESOLVED,
+          status: STATUS.LOADED,
         }));
       } catch (error) {
         this.setState({ error: error.message });
@@ -33,21 +33,21 @@ export class App extends Component {
 
   onHandleSubmit = async e => {
     e.preventDefault();
+
+    const { value } = e.target.elements.query;
+    await this.setState({ page: 1, query: value, status: STATUS.PENDING });
+
     try {
-      await this.setState({ page: 1 });
       const { page, query } = this.state;
       const data = await fetchImage(query, page);
       this.totalHits = data.totalHits;
       this.setState({
         images: data.hits,
+        status: STATUS.LOADED,
       });
     } catch (error) {
       this.setState({ error: error.message });
     }
-  };
-
-  onHandleChange = ({ currentTarget: { value } }) => {
-    this.setState({ query: value });
   };
 
   onHandleClick = () => {
@@ -82,16 +82,16 @@ export class App extends Component {
     const { images, error, status, showModal } = this.state;
     return (
       <div className="App">
-        <SearchBar
-          onHandleSubmit={this.onHandleSubmit}
-          onHandleChange={this.onHandleChange}
-        />
+        <SearchBar onHandleSubmit={this.onHandleSubmit} />
         {error && <p>{`${error}. Try to reload your page!`}</p>}
+        {!images.length && status === STATUS.LOADED && (
+          <p>Nothing found. Try searching with a different parameter!</p>
+        )}
         {!!images.length && (
           <ImageGallery images={this.state.images} openModal={this.openModal} />
         )}
 
-        {(status === STATUS.IDLE || status === STATUS.RESOLVED) &&
+        {(status === STATUS.IDLE || status === STATUS.LOADED) &&
           !!images.length && (
             <Button
               onHandleClick={this.onHandleClick}
