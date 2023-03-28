@@ -17,10 +17,10 @@ export class App extends Component {
     error: null,
     status: STATUS.IDLE,
     showModal: false,
+    currentIndex: null,
   };
 
   totalHits = null;
-  currentId = null;
 
   async componentDidUpdate(_, prevState) {
     if (prevState.page < this.state.page) {
@@ -69,8 +69,9 @@ export class App extends Component {
     this.setState({
       showModal: true,
     });
-    this.currentId = id;
     document.addEventListener('keydown', this.onKeyClick);
+    const index = this.state.images.findIndex(image => image.id === id);
+    this.setState({ currentIndex: index });
   };
 
   onKeyClick = e => {
@@ -85,8 +86,17 @@ export class App extends Component {
     }
   };
 
+  changeIndex = value => {
+    this.setState(prevState => ({
+      currentIndex: prevState.currentIndex + value,
+    }));
+  };
+
   render() {
     const { images, error, status, showModal } = this.state;
+    const currentImage = this.state.images[this.state.currentIndex];
+    const totalImages = this.state.images.length;
+
     return (
       <div className="App">
         <SearchBar onHandleSubmit={this.onHandleSubmit} />
@@ -110,9 +120,12 @@ export class App extends Component {
         {status === STATUS.LOADING && <Loader />}
         {showModal && (
           <Modal
-            image={this.imageToShow()}
+            image={currentImage}
             onKeyClick={this.onKeyClick}
             onMouseClick={this.onMouseClick}
+            totalImages={totalImages}
+            currentPosition={this.state.currentIndex + 1}
+            changeIndex={this.changeIndex}
           />
         )}
       </div>

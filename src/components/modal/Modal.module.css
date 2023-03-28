@@ -11,7 +11,27 @@
   z-index: 1200;
 }
 
+.Message {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #fff;
+}
+
 .Modal {
+  display: flex;
+  align-items: center;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+}
+
+.Button {
+  height: 20px;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.Icon {
+  fill: #fff;
 }
