@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { GoSearch } from 'react-icons/go';
-import css from './SearchBar.module.css';
+
+import { SearchForm, Button, Input } from './SearchBar.styled';
 
 export class SearchBar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    status: PropTypes.string.isRequired,
   };
 
   state = { querySearch: '' };
@@ -26,27 +26,20 @@ export class SearchBar extends Component {
     const { querySearch } = this.state;
 
     return (
-      <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={this.onSubmit}>
-          <button
-            type="submit"
-            className={css['SearchForm-button']}
-            disabled={this.props.status === 'pending'}
-          >
-            <GoSearch />
-          </button>
-          <input
-            className={css['SearchForm-input']}
-            type="text"
-            name="query"
-            value={querySearch}
-            placeholder="Search images and photos"
-            autoComplete="off"
-            autoFocus
-            onChange={this.onHandleChange}
-          />
-        </form>
-      </header>
+      <SearchForm onSubmit={this.onSubmit}>
+        <Button type="submit">
+          <GoSearch />
+        </Button>
+        <Input
+          type="text"
+          name="query"
+          value={querySearch}
+          placeholder="Search images and photos"
+          autoComplete="off"
+          autoFocus
+          onChange={this.onHandleChange}
+        />
+      </SearchForm>
     );
   }
 }

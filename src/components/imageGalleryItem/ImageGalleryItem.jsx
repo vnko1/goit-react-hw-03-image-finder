@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import css from './ImageGalleryItem.module.css';
+import { ImageGalleryItemImage } from './ImageGalleryItem.styled';
 
 export const ImageGalleryItem = ({ src, alt }) => {
-  return <img src={src} alt={alt} className={css['ImageGalleryItem-image']} />;
+  return <ImageGalleryItemImage src={src} alt={alt} />;
 };
 
 ImageGalleryItem.propTypes = {

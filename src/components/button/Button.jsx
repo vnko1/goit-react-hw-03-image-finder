@@ -1,20 +1,16 @@
 import PropTypes from 'prop-types';
-import css from './Button.module.css';
 
-export const Button = ({ disabled, onHandleClick }) => {
+import { LoadButton } from './Button.styled';
+
+export const Button = ({ disabled, loadMore }) => {
   return (
-    <button
-      type="button"
-      className={css.Button}
-      disabled={disabled}
-      onClick={onHandleClick}
-    >
+    <LoadButton type="button" disabled={disabled} onClick={loadMore}>
       Load more
-    </button>
+    </LoadButton>
   );
 };
 
 Button.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  onHandleClick: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
 };
