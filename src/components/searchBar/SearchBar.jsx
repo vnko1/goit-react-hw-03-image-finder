@@ -5,7 +5,7 @@ import css from './SearchBar.module.css';
 
 export class SearchBar extends Component {
   static propTypes = {
-    onHandleSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
   };
 
   state = { querySearch: '' };
@@ -15,13 +15,17 @@ export class SearchBar extends Component {
     this.setState({ querySearch: value });
   };
 
+  onSubmit = e => {
+    e.preventDefault();
+    this.props.onSubmit(this.state.querySearch.trim());
+  };
+
   render() {
-    const { onHandleSubmit } = this.props;
     const { querySearch } = this.state;
 
     return (
       <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={onHandleSubmit}>
+        <form className={css.SearchForm} onSubmit={this.onSubmit}>
           <button type="submit" className={css['SearchForm-button']}>
             <GoSearch />
           </button>

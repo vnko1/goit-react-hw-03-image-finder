@@ -61,10 +61,8 @@ export class App extends Component {
     });
   };
 
-  onHandleSubmit = e => {
-    e.preventDefault();
-    const { value } = e.target.elements.query;
-    this.setState({ query: value.trim() });
+  onHandleSubmit = value => {
+    this.setState({ query: value });
   };
 
   onHandleClick = () => {
@@ -120,7 +118,7 @@ export class App extends Component {
 
     return (
       <div className="App">
-        <SearchBar onHandleSubmit={this.onHandleSubmit} />
+        <SearchBar onSubmit={this.onHandleSubmit} />
         {error && <Message>{`${error}. Try to reload your page!`}</Message>}
         {!images.length && status === STATUS.LOADED && (
           <Message>
