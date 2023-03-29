@@ -109,11 +109,9 @@ export class App extends Component {
       });
       return;
     }
-    this.setState(prevState => {
-      return {
-        currentIndex: prevState.currentIndex + value,
-      };
-    });
+    this.setState(prevState => ({
+      currentIndex: prevState.currentIndex + value,
+    }));
   };
 
   render() {
