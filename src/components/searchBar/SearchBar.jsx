@@ -6,7 +6,6 @@ import css from './SearchBar.module.css';
 export class SearchBar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    status: PropTypes.string.isRequired,
   };
 
   state = { querySearch: '' };
@@ -28,11 +27,7 @@ export class SearchBar extends Component {
     return (
       <header className={css.Searchbar}>
         <form className={css.SearchForm} onSubmit={this.onSubmit}>
-          <button
-            type="submit"
-            className={css['SearchForm-button']}
-            disabled={this.props.status === 'pending'}
-          >
+          <button type="submit" className={css['SearchForm-button']}>
             <GoSearch />
           </button>
           <input

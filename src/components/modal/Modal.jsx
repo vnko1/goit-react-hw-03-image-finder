@@ -8,33 +8,52 @@ const modal = document.querySelector('#modal-root');
 
 export class Modal extends Component {
   static propTypes = {
-    onKeyClick: PropTypes.func.isRequired,
-    onMouseClick: PropTypes.func.isRequired,
     totalImages: PropTypes.number.isRequired,
     currentPosition: PropTypes.number.isRequired,
-    changeIndex: PropTypes.func.isRequired,
     image: PropTypes.shape({
       largeImageURL: PropTypes.string.isRequired,
       tags: PropTypes.string.isRequired,
     }).isRequired,
+    toggleModal: PropTypes.func.isRequired,
+    changeCurrentIndex: PropTypes.func.isRequired,
   };
 
-  componentWillUnmount() {
-    const { onKeyClick } = this.props;
-    document.removeEventListener('keydown', onKeyClick);
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyClick);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyClick);
+  }
+
+  onKeyClick = async e => {
+    if (e.code === 'Escape') {
+      this.props.toggleModal();
+    }
+    if (e.code === 'ArrowRight') {
+      this.props.changeCurrentIndex(1);
+    }
+    if (e.code === 'ArrowLeft') {
+      this.props.changeCurrentIndex(-1);
+    }
+  };
+
+  onMouseClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.toggleModal();
+    }
+  };
 
   render() {
     const {
-      onMouseClick,
-      changeIndex,
+      changeCurrentIndex,
       totalImages,
       currentPosition,
       image: { largeImageURL, tags },
     } = this.props;
 
     return createPortal(
-      <div className={css.Overlay} onClick={onMouseClick}>
+      <div className={css.Overlay} onClick={this.onMouseClick}>
         <div className={css.Modal}>
           <span
             className={css.Message}
@@ -42,7 +61,7 @@ export class Modal extends Component {
           <button
             type="button"
             className={css.Button}
-            onClick={() => changeIndex(-1)}
+            onClick={() => changeCurrentIndex(-1)}
           >
             <MdArrowBackIos className={css.Icon} />
           </button>
@@ -50,7 +69,7 @@ export class Modal extends Component {
           <button
             type="button"
             className={css.Button}
-            onClick={() => changeIndex(1)}
+            onClick={() => changeCurrentIndex(1)}
           >
             <MdArrowForwardIos className={css.Icon} />
           </button>
