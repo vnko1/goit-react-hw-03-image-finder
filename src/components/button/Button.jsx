@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import css from './Button.module.css';
 
-export const Button = ({ disabled, onHandleClick }) => {
+export const Button = ({ disabled, loadMore }) => {
   return (
     <button
       type="button"
       className={css.Button}
       disabled={disabled}
-      onClick={onHandleClick}
+      onClick={loadMore}
     >
       Load more
     </button>
@@ -16,5 +16,5 @@ export const Button = ({ disabled, onHandleClick }) => {
 
 Button.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  onHandleClick: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
 };

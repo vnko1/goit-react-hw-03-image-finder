@@ -20,51 +20,16 @@ export class App extends Component {
     currentIndex: null,
   };
 
-  totalHits = null;
-
-  async componentDidUpdate(_, prevState) {
-    if (prevState.query !== this.state.query) {
-      try {
-        await this.setState({ page: 1, status: STATUS.LOADING });
-        const { page, query } = this.state;
-        const data = await fetchImage(query, page);
-        this.totalHits = data.totalHits;
-
-        this.setState({
-          images: this.normalizedData(data.hits),
-          status: STATUS.LOADED,
-        });
-      } catch (error) {
-        this.setState({ error: error.message, status: STATUS.ERROR });
-      }
-    }
-
-    if (prevState.page < this.state.page) {
-      try {
-        const { page, query } = this.state;
-        this.setState({ status: STATUS.LOADING });
-        const data = await fetchImage(query, page);
-        this.setState(prevState => ({
-          images: [...prevState.images, ...this.normalizedData(data.hits)],
-          status: STATUS.LOADED,
-        }));
-      } catch (error) {
-        this.setState({ error: error.message, status: STATUS.ERROR });
-      }
-    }
-  }
-
-  normalizedData = data => {
-    return data.map(({ id, tags, webformatURL, largeImageURL }) => {
-      return { id, tags, webformatURL, largeImageURL };
-    });
+  getImageLength = value => {
+    return value;
   };
 
   onHandleSubmit = value => {
-    this.setState({ query: value });
+    this.setState({ query: value, page: 1 });
   };
 
-  onHandleClick = () => {
+  loadMore = () => {
+    console.log('object');
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
@@ -112,29 +77,34 @@ export class App extends Component {
   };
 
   render() {
-    const { images, error, status, showModal } = this.state;
+    const { images, error, status, showModal, query, page } = this.state;
     const currentImage = this.state.images[this.state.currentIndex];
 
     return (
       <div className="App">
         <SearchBar onSubmit={this.onHandleSubmit} status={status} />
-        {error && <Message>{`${error}. Try to reload your page!`}</Message>}
+        {/* {error && <Message>{`${error}. Try to reload your page!`}</Message>}
         {!images.length && status === STATUS.LOADED && (
           <Message>
             Nothing found. Try searching with a different parameter!
           </Message>
-        )}
-        {!!images.length && (
-          <ImageGallery images={this.state.images} openModal={this.openModal} />
-        )}
+        )} */}
 
-        {(status === STATUS.IDLE || status === STATUS.LOADED) &&
+        <ImageGallery
+          querySearch={query}
+          nextPage={page}
+          imageLength={this.getImageLength}
+          loadMore={this.loadMore}
+          disabled={images.length >= this.totalHits}
+        />
+
+        {/* {(status === STATUS.IDLE || status === STATUS.LOADED) &&
           !!images.length && (
             <Button
-              onHandleClick={this.onHandleClick}
+              loadMore={this.loadMore}
               disabled={images.length >= this.totalHits}
             />
-          )}
+          )} */}
         {status === STATUS.LOADING && <Loader />}
         {showModal && (
           <Modal
