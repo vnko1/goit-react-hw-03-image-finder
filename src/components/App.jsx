@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { SearchBar, ImageGallery } from './index';
+import { SearchBar, ImageGallery, Header } from './index';
+import { GlobalStyle } from 'globalStyle/GlobalStyle';
+import { Layout } from './Layout.styled';
 
 export class App extends Component {
   state = {
@@ -19,14 +21,17 @@ export class App extends Component {
     const { query, page } = this.state;
 
     return (
-      <div className="App">
-        <SearchBar onSubmit={this.onHandleSubmit} />
+      <Layout>
+        <Header>
+          <SearchBar onSubmit={this.onHandleSubmit} />
+        </Header>
         <ImageGallery
           querySearch={query}
           nextPage={page}
           loadMore={this.loadMore}
         />
-      </div>
+        <GlobalStyle />
+      </Layout>
     );
   }
 }

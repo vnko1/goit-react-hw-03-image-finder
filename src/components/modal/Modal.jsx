@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
-import css from './Modal.module.css';
+import {
+  Overlay,
+  ModalContainer,
+  CurrentPageText,
+  Button,
+  ArrowBack,
+  ArrowForward,
+} from './Modal.styled';
 
 const modal = document.querySelector('#modal-root');
 
@@ -53,28 +59,18 @@ export class Modal extends Component {
     } = this.props;
 
     return createPortal(
-      <div className={css.Overlay} onClick={this.onMouseClick}>
-        <div className={css.Modal}>
-          <span
-            className={css.Message}
-          >{`${currentPosition}/${totalImages}`}</span>
-          <button
-            type="button"
-            className={css.Button}
-            onClick={() => changeCurrentIndex(-1)}
-          >
-            <MdArrowBackIos className={css.Icon} />
-          </button>
+      <Overlay onClick={this.onMouseClick}>
+        <ModalContainer>
+          <CurrentPageText>{`${currentPosition}/${totalImages}`}</CurrentPageText>
+          <Button type="button" onClick={() => changeCurrentIndex(-1)}>
+            <ArrowBack />
+          </Button>
           <img src={largeImageURL} alt={tags} width="1280" />
-          <button
-            type="button"
-            className={css.Button}
-            onClick={() => changeCurrentIndex(1)}
-          >
-            <MdArrowForwardIos className={css.Icon} />
-          </button>
-        </div>
-      </div>,
+          <Button type="button" onClick={() => changeCurrentIndex(1)}>
+            <ArrowForward />
+          </Button>
+        </ModalContainer>
+      </Overlay>,
       modal
     );
   }

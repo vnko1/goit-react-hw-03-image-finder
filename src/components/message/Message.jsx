@@ -1,6 +1,8 @@
-import PropTypes from "prop-types";
-// import css from './Message.module.css';
+import PropTypes from 'prop-types';
+import { MessageContainer } from './Message.styled';
 
-export const Message = ({ children }) => <p>{children}</p>;
+export const Message = ({ children }) => (
+  <MessageContainer>{children}</MessageContainer>
+);
 
 Message.propTypes = { children: PropTypes.node.isRequired };

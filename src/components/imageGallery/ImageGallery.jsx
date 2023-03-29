@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { STATUS, fetchImage } from 'services';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Button, Loader, Modal, Message } from 'components';
-import css from './ImageGallery.module.css';
+import { ImageGalleryList, ImageGalleryItems } from './ImageGallery.styled';
 
 export class ImageGallery extends Component {
   static propTypes = {
@@ -88,22 +88,21 @@ export class ImageGallery extends Component {
     const currentImage = this.state.images[this.state.currentIndex];
     return (
       <>
-        <ul className={css.ImageGallery}>
+        <ImageGalleryList>
           {images.map(image => {
             return (
-              <li
+              <ImageGalleryItems
                 key={image.id}
-                className={css.ImageGalleryItem}
                 onClick={() => {
                   this.setCurrentIndex(image.id);
                   this.toggleModal();
                 }}
               >
                 <ImageGalleryItem src={image.webformatURL} alt={image.tags} />
-              </li>
+              </ImageGalleryItems>
             );
           })}
-        </ul>
+        </ImageGalleryList>
         {!!images.length && status === STATUS.RESOLVED && (
           <Button
             loadMore={loadMore}
