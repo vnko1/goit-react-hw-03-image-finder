@@ -117,7 +117,7 @@ export class App extends Component {
 
     return (
       <div className="App">
-        <SearchBar onSubmit={this.onHandleSubmit} />
+        <SearchBar onSubmit={this.onHandleSubmit} status={status} />
         {error && <Message>{`${error}. Try to reload your page!`}</Message>}
         {!images.length && status === STATUS.LOADED && (
           <Message>

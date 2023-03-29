@@ -46,6 +46,10 @@
   opacity: 1;
 }
 
+.SearchForm-button:disabled {
+  background-color: grey;
+}
+
 .SearchForm-button-label {
   position: absolute;
   width: 1px;
