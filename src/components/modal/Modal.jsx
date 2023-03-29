@@ -10,7 +10,8 @@ export class Modal extends Component {
   static propTypes = {
     onKeyClick: PropTypes.func.isRequired,
     onMouseClick: PropTypes.func.isRequired,
-
+    totalImages: PropTypes.number.isRequired,
+    currentPosition: PropTypes.number.isRequired,
     changeIndex: PropTypes.func.isRequired,
     image: PropTypes.shape({
       largeImageURL: PropTypes.string.isRequired,
@@ -27,12 +28,17 @@ export class Modal extends Component {
     const {
       onMouseClick,
       changeIndex,
+      totalImages,
+      currentPosition,
       image: { largeImageURL, tags },
     } = this.props;
 
     return createPortal(
       <div className={css.Overlay} onClick={onMouseClick}>
         <div className={css.Modal}>
+          <span
+            className={css.Message}
+          >{`${currentPosition}/${totalImages}`}</span>
           <button
             type="button"
             className={css.Button}

@@ -80,7 +80,7 @@ export class App extends Component {
     this.setState({ currentIndex: index });
   };
 
-  onKeyClick = e => {
+  onKeyClick = async e => {
     if (e.code === 'Escape') {
       this.setState({ showModal: false });
     }
@@ -99,15 +99,15 @@ export class App extends Component {
   };
 
   changeIndex = value => {
-    if (this.state.currentIndex < 1) {
-      this.setState({ currentIndex: this.state.images.length - 1 });
-    }
-    if (this.state.currentIndex === this.state.images.length - 1) {
-      this.setState({
-        currentIndex: 0,
-      });
-    }
     this.setState(prevState => {
+      if (prevState.currentIndex + value < 0) {
+        return this.setState({ currentIndex: this.state.images.length - 1 });
+      }
+      if (prevState.currentIndex + value > this.state.images.length - 1) {
+        return this.setState({
+          currentIndex: 0,
+        });
+      }
       return {
         currentIndex: prevState.currentIndex + value,
       };
@@ -145,6 +145,8 @@ export class App extends Component {
             onKeyClick={this.onKeyClick}
             onMouseClick={this.onMouseClick}
             changeIndex={this.changeIndex}
+            totalImages={this.state.images.length}
+            currentPosition={this.state.currentIndex + 1}
           />
         )}
       </div>
