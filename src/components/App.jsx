@@ -101,11 +101,13 @@ export class App extends Component {
   changeIndex = value => {
     if (this.state.currentIndex + value < 0) {
       this.setState({ currentIndex: this.state.images.length - 1 });
+      return;
     }
     if (this.state.currentIndex + value > this.state.images.length - 1) {
       this.setState({
         currentIndex: 0,
       });
+      return;
     }
     this.setState(prevState => {
       return {
