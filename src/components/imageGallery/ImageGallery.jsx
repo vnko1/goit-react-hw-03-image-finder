@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { animateScroll as scroll } from 'react-scroll';
 import { STATUS, fetchImage } from 'services';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Button, Loader, Modal, Message } from 'components';
@@ -49,6 +50,7 @@ export class ImageGallery extends Component {
         this.setState({ error: error, status: STATUS.ERROR });
       }
     }
+    scroll.scrollToBottom();
   }
 
   normalizedData = data => {
