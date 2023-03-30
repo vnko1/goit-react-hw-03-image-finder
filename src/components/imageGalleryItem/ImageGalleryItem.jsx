@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { ImageGalleryItemImage } from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ src, alt }) => {
-  return <ImageGalleryItemImage src={src} alt={alt} />;
-};
+export const ImageGalleryItem = ({ tags, largeImageURL }) => (
+  <ImageGalleryItemImage src={largeImageURL} alt={tags} />
+);
 
 ImageGalleryItem.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
 };

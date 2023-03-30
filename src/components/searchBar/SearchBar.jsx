@@ -18,8 +18,10 @@ export class SearchBar extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    if (!this.state.querySearch.trim()) return;
-    this.props.onSubmit(this.state.querySearch.trim());
+    const { querySearch } = this.state;
+    const { onSubmit } = this.props;
+    if (!querySearch.trim()) return;
+    onSubmit(querySearch.trim());
   };
 
   render() {

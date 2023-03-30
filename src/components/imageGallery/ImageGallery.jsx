@@ -23,34 +23,34 @@ export class ImageGallery extends Component {
 
   totalHits = null;
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps) {
     const { querySearch, nextPage } = this.props;
-    if (prevProps.querySearch !== this.props.querySearch) {
+    if (prevProps.querySearch !== querySearch) {
       try {
         this.setState({ status: STATUS.PENDING, error: null });
-        const data = await fetchImage(querySearch, nextPage);
-        this.totalHits = data.totalHits;
+        const { totalHits, hits } = await fetchImage(querySearch, nextPage);
+        this.totalHits = totalHits;
         this.setState({
-          images: this.normalizedData(data.hits),
+          images: this.normalizedData(hits),
           status: STATUS.RESOLVED,
         });
       } catch (error) {
-        this.setState({ error: error, status: STATUS.ERROR });
+        this.setState({ error, status: STATUS.ERROR });
       }
     }
-    if (prevProps.nextPage < this.props.nextPage) {
+    if (prevProps.nextPage < nextPage) {
       try {
         this.setState({ status: STATUS.PENDING, error: null });
-        const data = await fetchImage(querySearch, nextPage);
+        const { hits } = await fetchImage(querySearch, nextPage);
         this.setState(prevState => ({
-          images: [...prevState.images, ...this.normalizedData(data.hits)],
+          images: [...prevState.images, ...this.normalizedData(hits)],
           status: STATUS.RESOLVED,
         }));
+        scroll.scrollToBottom();
       } catch (error) {
-        this.setState({ error: error, status: STATUS.ERROR });
+        this.setState({ error, status: STATUS.ERROR });
       }
     }
-    scroll.scrollToBottom();
   }
 
   normalizedData = data => {
@@ -60,7 +60,8 @@ export class ImageGallery extends Component {
   };
 
   setCurrentIndex = id => {
-    const index = this.state.images.findIndex(image => image.id === id);
+    const { images } = this.state;
+    const index = images.findIndex(image => image.id === id);
     this.setState({ currentIndex: index });
   };
 
@@ -69,11 +70,12 @@ export class ImageGallery extends Component {
   };
 
   changeCurrentIndex = value => {
-    if (this.state.currentIndex + value < 0) {
-      this.setState({ currentIndex: this.state.images.length - 1 });
+    const { currentIndex, images } = this.state;
+    if (currentIndex + value < 0) {
+      this.setState({ currentIndex: images.length - 1 });
       return;
     }
-    if (this.state.currentIndex + value > this.state.images.length - 1) {
+    if (currentIndex + value > images.length - 1) {
       this.setState({
         currentIndex: 0,
       });
@@ -85,22 +87,22 @@ export class ImageGallery extends Component {
   };
 
   render() {
-    const { images, status, showModal, error } = this.state;
+    const { images, status, showModal, error, currentIndex } = this.state;
     const { loadMore } = this.props;
-    const currentImage = this.state.images[this.state.currentIndex];
+    const currentImage = images[currentIndex];
     return (
       <>
         <ImageGalleryList>
-          {images.map(image => {
+          {images.map(({ id, ...otherProps }) => {
             return (
               <ImageGalleryItems
-                key={image.id}
+                key={id}
                 onClick={() => {
-                  this.setCurrentIndex(image.id);
+                  this.setCurrentIndex(id);
                   this.toggleModal();
                 }}
               >
-                <ImageGalleryItem src={image.webformatURL} alt={image.tags} />
+                <ImageGalleryItem {...otherProps} />
               </ImageGalleryItems>
             );
           })}
@@ -117,8 +119,8 @@ export class ImageGallery extends Component {
             image={currentImage}
             toggleModal={this.toggleModal}
             changeCurrentIndex={this.changeCurrentIndex}
-            totalImages={this.state.images.length}
-            currentPosition={this.state.currentIndex + 1}
+            totalImages={images.length}
+            currentPosition={currentIndex + 1}
           />
         )}
         {error && <Message>{`${error}. Try to reload your page!`}</Message>}

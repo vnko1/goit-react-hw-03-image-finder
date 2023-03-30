@@ -33,20 +33,22 @@ export class Modal extends Component {
   }
 
   onKeyClick = async e => {
+    const { toggleModal, changeCurrentIndex } = this.props;
     if (e.code === 'Escape') {
-      this.props.toggleModal();
+      toggleModal();
     }
     if (e.code === 'ArrowRight') {
-      this.props.changeCurrentIndex(1);
+      changeCurrentIndex(1);
     }
     if (e.code === 'ArrowLeft') {
-      this.props.changeCurrentIndex(-1);
+      changeCurrentIndex(-1);
     }
   };
 
   onMouseClick = e => {
+    const { toggleModal } = this.props;
     if (e.target === e.currentTarget) {
-      this.props.toggleModal();
+      toggleModal();
     }
   };
 
