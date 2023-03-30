@@ -13,7 +13,7 @@ export class SearchBar extends Component {
 
   onHandleChange = e => {
     const { value } = e.currentTarget;
-    this.setState({ querySearch: value.toLowerCase() });
+    this.setState({ querySearch: value });
   };
 
   onSubmit = e => {
@@ -21,7 +21,7 @@ export class SearchBar extends Component {
     const { querySearch } = this.state;
     const { onSubmit } = this.props;
     if (!querySearch.trim()) return;
-    onSubmit(querySearch.trim());
+    onSubmit(querySearch.trim().toLowerCase());
   };
 
   render() {
