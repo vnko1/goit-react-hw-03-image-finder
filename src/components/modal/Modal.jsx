@@ -32,7 +32,7 @@ export class Modal extends Component {
     document.removeEventListener('keydown', this.onKeyClick);
   }
 
-  onKeyClick = async e => {
+  onKeyClick = e => {
     const { toggleModal, changeCurrentIndex } = this.props;
     if (e.code === 'Escape') {
       toggleModal();
